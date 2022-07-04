@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block con %}
+    <h1><b>번역기</b></h1>
+
+    <form method="post" name="transForm">
+        {% csrf_token %}
+        <div class="row mt-5">
+            <div class="col-sm-5">
+                <textarea name="bf" class="form-control" placeholder="번역할 문장을 입력해주세요!" style="height: 200px;">{{ bf }}</textarea>
+            </div>
+            <div class="col-sm-2 text-center" style="margin: auto;">
+                <select name="fr" class="form-select">
+                    {% for code, name in ndict.items %}
+                        <option value="{{code}}" {% if fr %}{% if fr == code %} selected {% endif %}{% else %}{% if code == "ko" %}selected{% endif %}{% endif %}>{{name|upper}}</option>
+                    {% endfor %}
+                </select>
+                <button  type="button" onclick="check()" class="btn btn-dark mt-4 mb-4">번역</button>
+                <select name="to" class="form-select">
+                    {% for code, name in ndict.items %}
+                        <option value="{{code}}" {% if to %}{% if to == code %} selected {% endif %}{% else %}{% if code == "en" %}selected{% endif %}{% endif %}>{{name|upper}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-5">
+                <textarea class="form-control" disabled style="height: 200px;">{{ af }}</textarea>
+            </div>
+        </div>
+    </form>
+
+
+    <script>
+        function check(){
+            t = document.transForm;
+            if(!t.bf.value){
+                alert("번역할 문장을 넣어야 하든말든...하...지");
+            }else if(t.fr.value == t.to.value){
+                alert("서로다른 나라코드를 입력해주세요!!");
+            }else{
+                t.submit();
+            }
+        }
+    </script>
+
+{% endblock %}
